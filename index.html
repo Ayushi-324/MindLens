@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MindLens — Cognitive Bias Detector</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #0f1117;
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 36px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: #718096;
+            font-size: 16px;
+        }
+
+        .input-card {
+            background: #1a1d2e;
+            border: 1px solid #2d3748;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        .input-card label {
+            display: block;
+            color: #a0aec0;
+            font-size: 14px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        textarea {
+            width: 100%;
+            background: #0f1117;
+            border: 2px solid #2d3748;
+            border-radius: 10px;
+            color: #e2e8f0;
+            font-size: 15px;
+            padding: 16px;
+            height: 180px;
+            resize: none;
+            outline: none;
+            transition: border 0.2s;
+            line-height: 1.6;
+        }
+
+        textarea:focus {
+            border-color: #667eea;
+        }
+
+        textarea::placeholder {
+            color: #4a5568;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: opacity 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .score-card {
+            background: #1a1d2e;
+            border: 1px solid #2d3748;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            display: none;
+            text-align: center;
+        }
+
+        .score-number {
+            font-size: 72px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .score-label {
+            color: #718096;
+            font-size: 14px;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .summary {
+            color: #a0aec0;
+            margin-top: 16px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .biases-section {
+            display: none;
+        }
+
+        .biases-section h2 {
+            font-size: 20px;
+            color: #e2e8f0;
+            margin-bottom: 16px;
+        }
+
+        .bias-card {
+            background: #1a1d2e;
+            border: 1px solid #2d3748;
+            border-left: 4px solid #667eea;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .bias-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 16px;
+        }
+
+        .bias-row {
+            margin-bottom: 12px;
+        }
+
+        .bias-row-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #4a5568;
+            margin-bottom: 4px;
+        }
+
+        .bias-row-value {
+            color: #cbd5e0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .reframe {
+            background: #0f1117;
+            border-radius: 8px;
+            padding: 12px;
+            color: #68d391;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .no-bias {
+            text-align: center;
+            color: #68d391;
+            font-size: 18px;
+            padding: 32px;
+        }
+
+        .history-section {
+            margin-top: 48px;
+        }
+
+        .history-section h2 {
+            font-size: 20px;
+            color: #e2e8f0;
+            margin-bottom: 16px;
+        }
+
+        .history-item {
+            background: #1a1d2e;
+            border: 1px solid #2d3748;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-text {
+            color: #718096;
+            font-size: 13px;
+            flex: 1;
+            margin-right: 16px;
+        }
+
+        .history-score {
+            font-size: 20px;
+            font-weight: bold;
+            color: #667eea;
+            white-space: nowrap;
+        }
+
+        .history-biases {
+            font-size: 12px;
+            color: #4a5568;
+            text-align: right;
+        }
+
+        .disclaimer {
+            text-align: center;
+            color: #4a5568;
+            font-size: 12px;
+            margin-top: 48px;
+            line-height: 1.6;
+        }
+
+        .loading {
+            text-align: center;
+            color: #667eea;
+            padding: 32px;
+            display: none;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #2d3748;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <header>
+            <h1>🧠 MindLens</h1>
+            <p>Detect cognitive biases in any text, argument, or decision</p>
+        </header>
+
+        <!-- Input -->
+        <div class="input-card">
+            <label>Paste your text, argument, or decision</label>
+            <textarea id="text-input" placeholder="e.g. 'We should invest in this stock because it has been going up for 3 months straight and everyone I know is buying it...'"></textarea>
+            <button id="analyze-btn" onclick="analyze()">Analyze for Biases →</button>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Analyzing cognitive patterns...</p>
+        </div>
+
+        <!-- Score -->
+        <div class="score-card" id="score-card">
+            <div class="score-number" id="score-number"></div>
+            <div class="score-label">Reasoning Quality Score / 10</div>
+            <div class="summary" id="summary-text"></div>
+        </div>
+
+        <!-- Biases -->
+        <div class="biases-section" id="biases-section">
+            <h2 id="biases-title"></h2>
+            <div id="biases-container"></div>
+        </div>
+
+        <!-- History -->
+        <div class="history-section">
+            <h2>Recent Analyses</h2>
+            <div id="history-container">
+                <p style="color: #4a5568;">No analyses yet.</p>
+            </div>
+        </div>
+
+        <div class="disclaimer">
+            MindLens is an educational tool for critical thinking.<br>
+            It does not replace professional psychological or medical advice.
+        </div>
+
+    </div>
+
+    <script>
+        const API = 'http://127.0.0.1:8000';
+
+        // Load history on page load
+        window.onload = loadHistory;
+
+        async function analyze() {
+            const text = document.getElementById('text-input').value.trim();
+
+            if (!text) {
+                alert('Please enter some text to analyze!');
+                return;
+            }
+
+            if (text.length < 20) {
+                alert('Please enter a longer text for better analysis!');
+                return;
+            }
+
+            const btn = document.getElementById('analyze-btn');
+            btn.innerText = 'Analyzing...';
+            btn.disabled = true;
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('score-card').style.display = 'none';
+            document.getElementById('biases-section').style.display = 'none';
+
+            try {
+                const response = await fetch(`${API}/analyze`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: text })
+                });
+
+                const data = await response.json();
+                console.log("Result:", data);
+
+                document.getElementById('loading').style.display = 'none';
+
+                // Show score
+                document.getElementById('score-number').innerText = data.score;
+                document.getElementById('summary-text').innerText = data.summary;
+                document.getElementById('score-card').style.display = 'block';
+
+                // Show biases
+                const biasesSection = document.getElementById('biases-section');
+                const biasesContainer = document.getElementById('biases-container');
+                const biasesTitle = document.getElementById('biases-title');
+
+                biasesContainer.innerHTML = '';
+
+                if (data.biases.length === 0) {
+                    biasesTitle.innerText = '✅ No Biases Detected';
+                    biasesContainer.innerHTML = '<div class="no-bias">Your reasoning appears objective and well-balanced!</div>';
+                } else {
+                    biasesTitle.innerText = `⚠️ ${data.biases.length} Cognitive Bias${data.biases.length > 1 ? 'es' : ''} Detected`;
+                    data.biases.forEach(bias => {
+                        biasesContainer.innerHTML += `
+                            <div class="bias-card">
+                                <div class="bias-name">🔍 ${bias.name}</div>
+                                <div class="bias-row">
+                                    <div class="bias-row-label">Why it's present</div>
+                                    <div class="bias-row-value">${bias.explanation}</div>
+                                </div>
+                                <div class="bias-row">
+                                    <div class="bias-row-label">Impact on thinking</div>
+                                    <div class="bias-row-value">${bias.impact}</div>
+                                </div>
+                                <div class="bias-row">
+                                    <div class="bias-row-label">💡 How to reframe</div>
+                                    <div class="reframe">${bias.reframe}</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                biasesSection.style.display = 'block';
+
+                // Reload history
+                loadHistory();
+
+            } catch (err) {
+                console.error("Error:", err);
+                document.getElementById('loading').style.display = 'none';
+                alert('Something went wrong: ' + err.message);
+            }
+
+            btn.innerText = 'Analyze for Biases →';
+            btn.disabled = false;
+        }
+
+        async function loadHistory() {
+            try {
+                const response = await fetch(`${API}/history`);
+                const data = await response.json();
+
+                const container = document.getElementById('history-container');
+
+                if (data.length === 0) {
+                    container.innerHTML = '<p style="color: #4a5568;">No analyses yet.</p>';
+                    return;
+                }
+
+                container.innerHTML = data.map(item => `
+                    <div class="history-item">
+                        <div class="history-text">${item.text_preview}</div>
+                        <div>
+                            <div class="history-score">${item.score}/10</div>
+                            <div class="history-biases">${item.bias_count} bias${item.bias_count !== 1 ? 'es' : ''}</div>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (err) {
+                console.error("History error:", err);
+            }
+        }
+    </script>
+</body>
+</html>
