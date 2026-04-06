@@ -41,6 +41,40 @@
             font-size: 16px;
         }
 
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+            background: #1a1d2e;
+            padding: 6px;
+            border-radius: 12px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #718096;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
         .input-card {
             background: #1a1d2e;
             border: 1px solid #2d3748;
@@ -95,14 +129,8 @@
             transition: opacity 0.2s;
         }
 
-        button:hover {
-            opacity: 0.9;
-        }
-
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+        button:hover { opacity: 0.9; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
 
         .score-card {
             background: #1a1d2e;
@@ -137,9 +165,7 @@
             line-height: 1.6;
         }
 
-        .biases-section {
-            display: none;
-        }
+        .biases-section { display: none; }
 
         .biases-section h2 {
             font-size: 20px;
@@ -163,9 +189,7 @@
             margin-bottom: 16px;
         }
 
-        .bias-row {
-            margin-bottom: 12px;
-        }
+        .bias-row { margin-bottom: 12px; }
 
         .bias-row-label {
             font-size: 11px;
@@ -197,9 +221,7 @@
             padding: 32px;
         }
 
-        .history-section {
-            margin-top: 48px;
-        }
+        .history-section { margin-top: 48px; }
 
         .history-section h2 {
             font-size: 20px;
@@ -238,12 +260,126 @@
             text-align: right;
         }
 
-        .disclaimer {
+        /* Profile styles */
+        .profile-card {
+            background: #1a1d2e;
+            border: 1px solid #2d3748;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .profile-card h2 {
+            font-size: 20px;
+            color: #e2e8f0;
+            margin-bottom: 24px;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-box {
+            flex: 1;
+            background: #0f1117;
+            border-radius: 12px;
+            padding: 20px;
             text-align: center;
-            color: #4a5568;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: #718096;
             font-size: 12px;
-            margin-top: 48px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        .dna-box {
+            background: #0f1117;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border-left: 4px solid #764ba2;
+        }
+
+        .dna-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #4a5568;
+            margin-bottom: 8px;
+        }
+
+        .dna-text {
+            color: #e2e8f0;
+            font-size: 15px;
             line-height: 1.6;
+        }
+
+        .tip-box {
+            background: #0f1117;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #68d391;
+        }
+
+        .tip-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #4a5568;
+            margin-bottom: 8px;
+        }
+
+        .tip-text {
+            color: #68d391;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .bias-bar {
+            margin-bottom: 12px;
+        }
+
+        .bias-bar-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .bias-bar-name {
+            color: #cbd5e0;
+            font-size: 14px;
+        }
+
+        .bias-bar-count {
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .bias-bar-track {
+            background: #0f1117;
+            border-radius: 4px;
+            height: 8px;
+            overflow: hidden;
+        }
+
+        .bias-bar-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.5s ease;
         }
 
         .loading {
@@ -266,6 +402,14 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        .disclaimer {
+            text-align: center;
+            color: #4a5568;
+            font-size: 12px;
+            margin-top: 48px;
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body>
@@ -276,37 +420,80 @@
             <p>Detect cognitive biases in any text, argument, or decision</p>
         </header>
 
-        <!-- Input -->
-        <div class="input-card">
-            <label>Paste your text, argument, or decision</label>
-            <textarea id="text-input" placeholder="e.g. 'We should invest in this stock because it has been going up for 3 months straight and everyone I know is buying it...'"></textarea>
-            <button id="analyze-btn" onclick="analyze()">Analyze for Biases →</button>
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('analyze')">🔍 Analyze</div>
+            <div class="tab" onclick="switchTab('profile')">🧬 My Bias Profile</div>
+            <div class="tab" onclick="switchTab('history')">📋 History</div>
         </div>
 
-        <!-- Loading -->
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>Analyzing cognitive patterns...</p>
+        <!-- ANALYZE TAB -->
+        <div class="tab-content active" id="tab-analyze">
+            <div class="input-card">
+                <label>Paste your text, argument, or decision</label>
+                <textarea id="text-input" placeholder="e.g. 'We should invest in this stock because it has been going up for 3 months straight and everyone I know is buying it...'"></textarea>
+                <button id="analyze-btn" onclick="analyze()">Analyze for Biases →</button>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Analyzing cognitive patterns...</p>
+            </div>
+
+            <div class="score-card" id="score-card">
+                <div class="score-number" id="score-number"></div>
+                <div class="score-label">Reasoning Quality Score / 10</div>
+                <div class="summary" id="summary-text"></div>
+            </div>
+
+            <div class="biases-section" id="biases-section">
+                <h2 id="biases-title"></h2>
+                <div id="biases-container"></div>
+            </div>
         </div>
 
-        <!-- Score -->
-        <div class="score-card" id="score-card">
-            <div class="score-number" id="score-number"></div>
-            <div class="score-label">Reasoning Quality Score / 10</div>
-            <div class="summary" id="summary-text"></div>
+        <!-- PROFILE TAB -->
+        <div class="tab-content" id="tab-profile">
+            <div class="profile-card">
+                <h2>🧬 Your Cognitive Bias DNA</h2>
+
+                <div class="stats-row">
+                    <div class="stat-box">
+                        <div class="stat-number" id="total-analyses">0</div>
+                        <div class="stat-label">Total Analyses</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="avg-score">0</div>
+                        <div class="stat-label">Avg Reasoning Score</div>
+                    </div>
+                </div>
+
+                <div class="dna-box">
+                    <div class="dna-label">🧠 Your Bias Pattern</div>
+                    <div class="dna-text" id="bias-dna">Analyze some text to build your profile.</div>
+                </div>
+
+                <div class="tip-box" style="margin-top: 16px;">
+                    <div class="tip-label">💡 Personal Improvement Tip</div>
+                    <div class="tip-text" id="improvement-tip">Complete at least one analysis to get your tip.</div>
+                </div>
+            </div>
+
+            <div class="profile-card">
+                <h2>📊 Your Top Biases</h2>
+                <div id="bias-bars">
+                    <p style="color: #4a5568;">No data yet — analyze some text first!</p>
+                </div>
+            </div>
         </div>
 
-        <!-- Biases -->
-        <div class="biases-section" id="biases-section">
-            <h2 id="biases-title"></h2>
-            <div id="biases-container"></div>
-        </div>
-
-        <!-- History -->
-        <div class="history-section">
-            <h2>Recent Analyses</h2>
-            <div id="history-container">
-                <p style="color: #4a5568;">No analyses yet.</p>
+        <!-- HISTORY TAB -->
+        <div class="tab-content" id="tab-history">
+            <div class="history-section">
+                <h2>Recent Analyses</h2>
+                <div id="history-container">
+                    <p style="color: #4a5568;">No analyses yet.</p>
+                </div>
             </div>
         </div>
 
@@ -320,21 +507,26 @@
     <script>
         const API = 'http://127.0.0.1:8000';
 
-        // Load history on page load
-        window.onload = loadHistory;
+        window.onload = () => {
+            loadHistory();
+            loadProfile();
+        };
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelector(`.tab[onclick="switchTab('${tab}')"]`).classList.add('active');
+            document.getElementById(`tab-${tab}`).classList.add('active');
+
+            if (tab === 'profile') loadProfile();
+            if (tab === 'history') loadHistory();
+        }
 
         async function analyze() {
             const text = document.getElementById('text-input').value.trim();
 
-            if (!text) {
-                alert('Please enter some text to analyze!');
-                return;
-            }
-
-            if (text.length < 20) {
-                alert('Please enter a longer text for better analysis!');
-                return;
-            }
+            if (!text) { alert('Please enter some text!'); return; }
+            if (text.length < 20) { alert('Please enter longer text for better analysis!'); return; }
 
             const btn = document.getElementById('analyze-btn');
             btn.innerText = 'Analyzing...';
@@ -356,12 +548,10 @@
 
                 document.getElementById('loading').style.display = 'none';
 
-                // Show score
                 document.getElementById('score-number').innerText = data.score;
                 document.getElementById('summary-text').innerText = data.summary;
                 document.getElementById('score-card').style.display = 'block';
 
-                // Show biases
                 const biasesSection = document.getElementById('biases-section');
                 const biasesContainer = document.getElementById('biases-container');
                 const biasesTitle = document.getElementById('biases-title');
@@ -395,8 +585,6 @@
                 }
 
                 biasesSection.style.display = 'block';
-
-                // Reload history
                 loadHistory();
 
             } catch (err) {
@@ -407,6 +595,41 @@
 
             btn.innerText = 'Analyze for Biases →';
             btn.disabled = false;
+        }
+
+        async function loadProfile() {
+            try {
+                const response = await fetch(`${API}/profile`);
+                const data = await response.json();
+
+                document.getElementById('total-analyses').innerText = data.total_analyses;
+                document.getElementById('avg-score').innerText = data.average_score;
+                document.getElementById('bias-dna').innerText = data.bias_dna;
+                document.getElementById('improvement-tip').innerText = data.improvement_tip || 'Complete more analyses to get a personalized tip.';
+
+                const barsContainer = document.getElementById('bias-bars');
+
+                if (data.top_biases.length === 0) {
+                    barsContainer.innerHTML = '<p style="color: #4a5568;">No data yet — analyze some text first!</p>';
+                    return;
+                }
+
+                const maxCount = data.top_biases[0].count;
+                barsContainer.innerHTML = data.top_biases.map(bias => `
+                    <div class="bias-bar">
+                        <div class="bias-bar-header">
+                            <span class="bias-bar-name">${bias.name}</span>
+                            <span class="bias-bar-count">${bias.count}x detected</span>
+                        </div>
+                        <div class="bias-bar-track">
+                            <div class="bias-bar-fill" style="width: ${(bias.count / maxCount) * 100}%"></div>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (err) {
+                console.error("Profile error:", err);
+            }
         }
 
         async function loadHistory() {
