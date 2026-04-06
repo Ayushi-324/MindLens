@@ -41,9 +41,89 @@
             font-size: 16px;
         }
 
+        .login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 60vh;
+        }
+
+        .login-card {
+            background: #1a1d2e;
+            border: 1px solid #2d3748;
+            border-radius: 16px;
+            padding: 48px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-card h2 {
+            font-size: 24px;
+            color: #e2e8f0;
+            margin-bottom: 8px;
+        }
+
+        .login-card p {
+            color: #718096;
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+
+        .login-card input {
+            width: 100%;
+            background: #0f1117;
+            border: 2px solid #2d3748;
+            border-radius: 10px;
+            color: #e2e8f0;
+            font-size: 16px;
+            padding: 14px 16px;
+            outline: none;
+            transition: border 0.2s;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .login-card input:focus { border-color: #667eea; }
+        .login-card input::placeholder { color: #4a5568; }
+
+        .app-screen { display: none; }
+
+        .user-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1a1d2e;
+            border: 1px solid #2d3748;
+            border-radius: 12px;
+            padding: 12px 20px;
+            margin-bottom: 24px;
+        }
+
+        .user-bar span { color: #a0aec0; font-size: 14px; }
+        .user-bar strong { color: #667eea; }
+
+        .logout-btn {
+            background: none;
+            border: 1px solid #2d3748;
+            color: #718096;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            width: auto;
+            margin: 0;
+        }
+
+        .logout-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+            opacity: 1;
+        }
+
         .tabs {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             margin-bottom: 32px;
             background: #1a1d2e;
             padding: 6px;
@@ -52,12 +132,12 @@
 
         .tab {
             flex: 1;
-            padding: 10px;
+            padding: 10px 6px;
             text-align: center;
             border-radius: 8px;
             cursor: pointer;
             color: #718096;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             transition: all 0.2s;
         }
@@ -67,13 +147,8 @@
             color: white;
         }
 
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
 
         .input-card {
             background: #1a1d2e;
@@ -107,13 +182,8 @@
             line-height: 1.6;
         }
 
-        textarea:focus {
-            border-color: #667eea;
-        }
-
-        textarea::placeholder {
-            color: #4a5568;
-        }
+        textarea:focus { border-color: #667eea; }
+        textarea::placeholder { color: #4a5568; }
 
         button {
             width: 100%;
@@ -221,7 +291,7 @@
             padding: 32px;
         }
 
-        .history-section { margin-top: 48px; }
+        .history-section { margin-top: 8px; }
 
         .history-section h2 {
             font-size: 20px;
@@ -260,7 +330,6 @@
             text-align: right;
         }
 
-        /* Profile styles */
         .profile-card {
             background: #1a1d2e;
             border: 1px solid #2d3748;
@@ -279,10 +348,12 @@
             display: flex;
             gap: 16px;
             margin-bottom: 24px;
+            flex-wrap: wrap;
         }
 
         .stat-box {
             flex: 1;
+            min-width: 100px;
             background: #0f1117;
             border-radius: 12px;
             padding: 20px;
@@ -348,9 +419,7 @@
             line-height: 1.6;
         }
 
-        .bias-bar {
-            margin-bottom: 12px;
-        }
+        .bias-bar { margin-bottom: 12px; }
 
         .bias-bar-header {
             display: flex;
@@ -358,15 +427,8 @@
             margin-bottom: 6px;
         }
 
-        .bias-bar-name {
-            color: #cbd5e0;
-            font-size: 14px;
-        }
-
-        .bias-bar-count {
-            color: #718096;
-            font-size: 14px;
-        }
+        .bias-bar-name { color: #cbd5e0; font-size: 14px; }
+        .bias-bar-count { color: #718096; font-size: 14px; }
 
         .bias-bar-track {
             background: #0f1117;
@@ -380,6 +442,31 @@
             background: linear-gradient(135deg, #667eea, #764ba2);
             border-radius: 4px;
             transition: width 0.5s ease;
+        }
+
+        .danger-bar-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #e53e3e, #c05621);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .clear-btn {
+            background: none;
+            border: 1px solid #e53e3e;
+            color: #e53e3e;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            width: auto;
+            margin: 0;
+        }
+
+        .clear-btn:hover {
+            background: #e53e3e;
+            color: white;
+            opacity: 1;
         }
 
         .loading {
@@ -399,8 +486,25 @@
             margin: 0 auto 16px;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .global-stat-box {
+            flex: 1;
+            min-width: 100px;
+            background: #0f1117;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .danger-badge {
+            display: inline-block;
+            background: #2d1515;
+            color: #fc8181;
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-left: 8px;
         }
 
         .disclaimer {
@@ -420,81 +524,140 @@
             <p>Detect cognitive biases in any text, argument, or decision</p>
         </header>
 
-        <!-- Tabs -->
-        <div class="tabs">
-            <div class="tab active" onclick="switchTab('analyze')">🔍 Analyze</div>
-            <div class="tab" onclick="switchTab('profile')">🧬 My Bias Profile</div>
-            <div class="tab" onclick="switchTab('history')">📋 History</div>
-        </div>
-
-        <!-- ANALYZE TAB -->
-        <div class="tab-content active" id="tab-analyze">
-            <div class="input-card">
-                <label>Paste your text, argument, or decision</label>
-                <textarea id="text-input" placeholder="e.g. 'We should invest in this stock because it has been going up for 3 months straight and everyone I know is buying it...'"></textarea>
-                <button id="analyze-btn" onclick="analyze()">Analyze for Biases →</button>
-            </div>
-
-            <div class="loading" id="loading">
-                <div class="spinner"></div>
-                <p>Analyzing cognitive patterns...</p>
-            </div>
-
-            <div class="score-card" id="score-card">
-                <div class="score-number" id="score-number"></div>
-                <div class="score-label">Reasoning Quality Score / 10</div>
-                <div class="summary" id="summary-text"></div>
-            </div>
-
-            <div class="biases-section" id="biases-section">
-                <h2 id="biases-title"></h2>
-                <div id="biases-container"></div>
+        <!-- LOGIN SCREEN -->
+        <div class="login-screen" id="login-screen">
+            <div class="login-card">
+                <h2>Welcome to MindLens</h2>
+                <p>Enter a username to start building your personal bias profile</p>
+                <input type="text" id="username-input" placeholder="Enter your username" maxlength="30" />
+                <button onclick="login()">Enter MindLens →</button>
             </div>
         </div>
 
-        <!-- PROFILE TAB -->
-        <div class="tab-content" id="tab-profile">
-            <div class="profile-card">
-                <h2>🧬 Your Cognitive Bias DNA</h2>
+        <!-- MAIN APP -->
+        <div class="app-screen" id="app-screen">
 
-                <div class="stats-row">
-                    <div class="stat-box">
-                        <div class="stat-number" id="total-analyses">0</div>
-                        <div class="stat-label">Total Analyses</div>
+            <div class="user-bar">
+                <span>👤 Logged in as <strong id="display-username"></strong></span>
+                <button class="logout-btn" onclick="logout()">Switch User</button>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('analyze')">🔍 Analyze</div>
+                <div class="tab" onclick="switchTab('profile')">🧬 My Profile</div>
+                <div class="tab" onclick="switchTab('history')">📋 History</div>
+                <div class="tab" onclick="switchTab('global')">🌍 Global</div>
+            </div>
+
+            <!-- ANALYZE TAB -->
+            <div class="tab-content active" id="tab-analyze">
+                <div class="input-card">
+                    <label>Paste your text, argument, or decision</label>
+                    <textarea id="text-input" placeholder="e.g. 'We should invest in this stock because it has been going up for 3 months and everyone I know is buying it...'"></textarea>
+                    <button id="analyze-btn" onclick="analyze()">Analyze for Biases →</button>
+                </div>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Analyzing cognitive patterns...</p>
+                </div>
+
+                <div class="score-card" id="score-card">
+                    <div class="score-number" id="score-number"></div>
+                    <div class="score-label">Reasoning Quality Score / 10</div>
+                    <div class="summary" id="summary-text"></div>
+                </div>
+
+                <div class="biases-section" id="biases-section">
+                    <h2 id="biases-title"></h2>
+                    <div id="biases-container"></div>
+                </div>
+            </div>
+
+            <!-- PROFILE TAB -->
+            <div class="tab-content" id="tab-profile">
+                <div class="profile-card">
+                    <h2>🧬 Your Cognitive Bias DNA</h2>
+                    <div class="stats-row">
+                        <div class="stat-box">
+                            <div class="stat-number" id="total-analyses">0</div>
+                            <div class="stat-label">Total Analyses</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number" id="avg-score">0</div>
+                            <div class="stat-label">Avg Score</div>
+                        </div>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-number" id="avg-score">0</div>
-                        <div class="stat-label">Avg Reasoning Score</div>
+                    <div class="dna-box">
+                        <div class="dna-label">🧠 Your Bias Pattern</div>
+                        <div class="dna-text" id="bias-dna">Analyze some text to build your profile.</div>
+                    </div>
+                    <div class="tip-box" style="margin-top: 16px;">
+                        <div class="tip-label">💡 Personal Improvement Tip</div>
+                        <div class="tip-text" id="improvement-tip">Complete at least one analysis to get your tip.</div>
                     </div>
                 </div>
 
-                <div class="dna-box">
-                    <div class="dna-label">🧠 Your Bias Pattern</div>
-                    <div class="dna-text" id="bias-dna">Analyze some text to build your profile.</div>
+                <div class="profile-card">
+                    <h2>📊 Your Top Biases</h2>
+                    <div id="bias-bars">
+                        <p style="color: #4a5568;">No data yet — analyze some text first!</p>
+                    </div>
                 </div>
 
-                <div class="tip-box" style="margin-top: 16px;">
-                    <div class="tip-label">💡 Personal Improvement Tip</div>
-                    <div class="tip-text" id="improvement-tip">Complete at least one analysis to get your tip.</div>
+                <div style="text-align: right; margin-top: 8px;">
+                    <button class="clear-btn" onclick="clearData()">🗑️ Clear My Data</button>
                 </div>
             </div>
 
-            <div class="profile-card">
-                <h2>📊 Your Top Biases</h2>
-                <div id="bias-bars">
-                    <p style="color: #4a5568;">No data yet — analyze some text first!</p>
+            <!-- HISTORY TAB -->
+            <div class="tab-content" id="tab-history">
+                <div class="history-section">
+                    <h2>Your Recent Analyses</h2>
+                    <div id="history-container">
+                        <p style="color: #4a5568;">No analyses yet.</p>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- HISTORY TAB -->
-        <div class="tab-content" id="tab-history">
-            <div class="history-section">
-                <h2>Recent Analyses</h2>
-                <div id="history-container">
-                    <p style="color: #4a5568;">No analyses yet.</p>
+            <!-- GLOBAL TAB -->
+            <div class="tab-content" id="tab-global">
+                <div class="profile-card">
+                    <h2>🌍 Global Insights</h2>
+                    <p style="color: #718096; font-size: 14px; margin-bottom: 24px;">Anonymized data across all MindLens users</p>
+
+                    <div class="stats-row">
+                        <div class="global-stat-box">
+                            <div class="stat-number" id="global-analyses">—</div>
+                            <div class="stat-label">Total Analyses</div>
+                        </div>
+                        <div class="global-stat-box">
+                            <div class="stat-number" id="global-users">—</div>
+                            <div class="stat-label">Total Users</div>
+                        </div>
+                        <div class="global-stat-box">
+                            <div class="stat-number" id="global-avg-score">—</div>
+                            <div class="stat-label">Avg Global Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-card">
+                    <h2>🔥 Most Common Biases Globally</h2>
+                    <div id="global-common-bars">
+                        <p style="color: #4a5568;">Loading...</p>
+                    </div>
+                </div>
+
+                <div class="profile-card">
+                    <h2>⚠️ Most Dangerous Biases</h2>
+                    <p style="color: #718096; font-size: 13px; margin-bottom: 16px;">Biases associated with the lowest reasoning scores</p>
+                    <div id="global-danger-bars">
+                        <p style="color: #4a5568;">Loading...</p>
+                    </div>
                 </div>
             </div>
+
         </div>
 
         <div class="disclaimer">
@@ -506,27 +669,55 @@
 
     <script>
         const API = 'http://127.0.0.1:8000';
+        let currentUser = null;
 
         window.onload = () => {
+            const saved = localStorage.getItem('mindlens_user');
+            if (saved) {
+                currentUser = saved;
+                showApp();
+            }
+        };
+
+        function login() {
+            const username = document.getElementById('username-input').value.trim();
+            if (!username) { alert('Please enter a username!'); return; }
+            if (username.length < 2) { alert('Username must be at least 2 characters!'); return; }
+            currentUser = username.toLowerCase();
+            localStorage.setItem('mindlens_user', currentUser);
+            showApp();
+        }
+
+        function showApp() {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app-screen').style.display = 'block';
+            document.getElementById('display-username').innerText = currentUser;
             loadHistory();
             loadProfile();
-        };
+        }
+
+        function logout() {
+            localStorage.removeItem('mindlens_user');
+            currentUser = null;
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('app-screen').style.display = 'none';
+            document.getElementById('username-input').value = '';
+        }
 
         function switchTab(tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelector(`.tab[onclick="switchTab('${tab}')"]`).classList.add('active');
             document.getElementById(`tab-${tab}`).classList.add('active');
-
             if (tab === 'profile') loadProfile();
             if (tab === 'history') loadHistory();
+            if (tab === 'global') loadGlobalInsights();
         }
 
         async function analyze() {
             const text = document.getElementById('text-input').value.trim();
-
             if (!text) { alert('Please enter some text!'); return; }
-            if (text.length < 20) { alert('Please enter longer text for better analysis!'); return; }
+            if (text.length < 20) { alert('Please enter longer text!'); return; }
 
             const btn = document.getElementById('analyze-btn');
             btn.innerText = 'Analyzing...';
@@ -540,22 +731,18 @@
                 const response = await fetch(`${API}/analyze`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: text })
+                    body: JSON.stringify({ username: currentUser, text: text })
                 });
 
                 const data = await response.json();
-                console.log("Result:", data);
-
                 document.getElementById('loading').style.display = 'none';
 
                 document.getElementById('score-number').innerText = data.score;
                 document.getElementById('summary-text').innerText = data.summary;
                 document.getElementById('score-card').style.display = 'block';
 
-                const biasesSection = document.getElementById('biases-section');
                 const biasesContainer = document.getElementById('biases-container');
                 const biasesTitle = document.getElementById('biases-title');
-
                 biasesContainer.innerHTML = '';
 
                 if (data.biases.length === 0) {
@@ -584,7 +771,7 @@
                     });
                 }
 
-                biasesSection.style.display = 'block';
+                document.getElementById('biases-section').style.display = 'block';
                 loadHistory();
 
             } catch (err) {
@@ -599,7 +786,7 @@
 
         async function loadProfile() {
             try {
-                const response = await fetch(`${API}/profile`);
+                const response = await fetch(`${API}/profile/${currentUser}`);
                 const data = await response.json();
 
                 document.getElementById('total-analyses').innerText = data.total_analyses;
@@ -608,7 +795,6 @@
                 document.getElementById('improvement-tip').innerText = data.improvement_tip || 'Complete more analyses to get a personalized tip.';
 
                 const barsContainer = document.getElementById('bias-bars');
-
                 if (data.top_biases.length === 0) {
                     barsContainer.innerHTML = '<p style="color: #4a5568;">No data yet — analyze some text first!</p>';
                     return;
@@ -634,11 +820,10 @@
 
         async function loadHistory() {
             try {
-                const response = await fetch(`${API}/history`);
+                const response = await fetch(`${API}/history/${currentUser}`);
                 const data = await response.json();
 
                 const container = document.getElementById('history-container');
-
                 if (data.length === 0) {
                     container.innerHTML = '<p style="color: #4a5568;">No analyses yet.</p>';
                     return;
@@ -656,6 +841,69 @@
 
             } catch (err) {
                 console.error("History error:", err);
+            }
+        }
+
+        async function loadGlobalInsights() {
+            try {
+                const response = await fetch(`${API}/global-insights`);
+                const data = await response.json();
+
+                document.getElementById('global-analyses').innerText = data.total_analyses;
+                document.getElementById('global-users').innerText = data.total_users;
+                document.getElementById('global-avg-score').innerText = data.avg_global_score;
+
+                // Most common biases
+                const commonContainer = document.getElementById('global-common-bars');
+                if (data.most_common_biases.length === 0) {
+                    commonContainer.innerHTML = '<p style="color: #4a5568;">No data yet — be the first to analyze!</p>';
+                } else {
+                    const maxCount = data.most_common_biases[0].count;
+                    commonContainer.innerHTML = data.most_common_biases.map(bias => `
+                        <div class="bias-bar">
+                            <div class="bias-bar-header">
+                                <span class="bias-bar-name">${bias.name}</span>
+                                <span class="bias-bar-count">${bias.count}x detected</span>
+                            </div>
+                            <div class="bias-bar-track">
+                                <div class="bias-bar-fill" style="width: ${(bias.count / maxCount) * 100}%"></div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+                // Most dangerous biases
+                const dangerContainer = document.getElementById('global-danger-bars');
+                if (data.most_dangerous_biases.length === 0) {
+                    dangerContainer.innerHTML = '<p style="color: #4a5568;">No data yet.</p>';
+                } else {
+                    dangerContainer.innerHTML = data.most_dangerous_biases.map(bias => `
+                        <div class="bias-bar">
+                            <div class="bias-bar-header">
+                                <span class="bias-bar-name">${bias.name} <span class="danger-badge">avg score: ${bias.avg_score}/10</span></span>
+                                <span class="bias-bar-count">${bias.count}x</span>
+                            </div>
+                            <div class="bias-bar-track">
+                                <div class="danger-bar-fill" style="width: ${((10 - bias.avg_score) / 10) * 100}%"></div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+            } catch (err) {
+                console.error("Global insights error:", err);
+            }
+        }
+
+        async function clearData() {
+            if (!confirm('Are you sure you want to delete all your data? This cannot be undone.')) return;
+            try {
+                await fetch(`${API}/clear/${currentUser}`, { method: 'DELETE' });
+                alert('Your data has been cleared!');
+                loadHistory();
+                loadProfile();
+            } catch (err) {
+                alert('Something went wrong: ' + err.message);
             }
         }
     </script>

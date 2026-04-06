@@ -1,18 +1,27 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 import google.generativeai as genai
 import json
 import re
 import os
 from collections import Counter
+from sqlalchemy import func, distinct
 from database import SessionLocal, AnalysisModel, BiasRecordModel
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel("gemini-3.1-flash-lite-preview")
 
+limiter = Limiter(key_func=get_remote_address)
+
 app = FastAPI()
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 app.add_middleware(
     CORSMiddleware,
@@ -23,6 +32,7 @@ app.add_middleware(
 
 
 class TextRequest(BaseModel):
+    username: str
     text: str
 
 
@@ -37,9 +47,10 @@ def read_index():
 
 
 @app.post("/analyze")
-def analyze(req: TextRequest):
+@limiter.limit("10/minute")
+def analyze(req: TextRequest, request: Request):
     try:
-        print("Step 1: received text")
+        print("Step 1: received text from user:", req.username)
 
         prompt = f"""
         You are an expert in cognitive psychology and critical thinking.
@@ -81,9 +92,9 @@ def analyze(req: TextRequest):
         result = parse_json_response(response.text)
         print("Step 4: parsed result")
 
-        # Save analysis to database
         db = SessionLocal()
         new_analysis = AnalysisModel(
+            username=req.username,
             text=req.text[:500],
             score=result["score"],
             summary=result["summary"],
@@ -93,9 +104,9 @@ def analyze(req: TextRequest):
         db.commit()
         db.refresh(new_analysis)
 
-        # Save each individual bias
         for bias in result["biases"]:
             bias_record = BiasRecordModel(
+                username=req.username,
                 bias_name=bias["name"],
                 explanation=bias["explanation"],
                 analysis_id=new_analysis.id
@@ -111,13 +122,13 @@ def analyze(req: TextRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/history")
-def history():
+@app.get("/history/{username}")
+def history(username: str):
     try:
         db = SessionLocal()
-        analyses = db.query(AnalysisModel).order_by(
-            AnalysisModel.id.desc()
-        ).limit(10).all()
+        analyses = db.query(AnalysisModel).filter(
+            AnalysisModel.username == username
+        ).order_by(AnalysisModel.id.desc()).limit(10).all()
         db.close()
 
         return [
@@ -134,13 +145,14 @@ def history():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/profile")
-def profile():
+@app.get("/profile/{username}")
+def profile(username: str):
     try:
         db = SessionLocal()
 
-        # Get all analyses
-        analyses = db.query(AnalysisModel).all()
+        analyses = db.query(AnalysisModel).filter(
+            AnalysisModel.username == username
+        ).all()
         total_analyses = len(analyses)
 
         if total_analyses == 0:
@@ -149,15 +161,15 @@ def profile():
                 "total_analyses": 0,
                 "average_score": 0,
                 "top_biases": [],
-                "bias_dna": "No analyses yet. Start analyzing text to build your bias profile.",
+                "bias_dna": "No analyses yet. Start analyzing text to build your profile.",
                 "improvement_tip": ""
             }
 
-        # Average score
         avg_score = round(sum(a.score for a in analyses) / total_analyses, 1)
 
-        # Count all biases
-        all_biases = db.query(BiasRecordModel).all()
+        all_biases = db.query(BiasRecordModel).filter(
+            BiasRecordModel.username == username
+        ).all()
         bias_names = [b.bias_name for b in all_biases]
         bias_counts = Counter(bias_names)
         top_biases = [
@@ -167,14 +179,12 @@ def profile():
 
         db.close()
 
-        # Generate bias DNA description
         if top_biases:
             top_bias_names = [b["name"] for b in top_biases[:3]]
             bias_dna = f"Your thinking is most influenced by: {', '.join(top_bias_names)}."
         else:
             bias_dna = "No biases detected yet — great critical thinking!"
 
-        # Improvement tip based on top bias
         improvement_tip = ""
         if top_biases:
             top = top_biases[0]["name"].lower()
@@ -204,4 +214,90 @@ def profile():
         }
 
     except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete("/clear/{username}")
+def clear_data(username: str):
+    try:
+        db = SessionLocal()
+        db.query(BiasRecordModel).filter(BiasRecordModel.username == username).delete()
+        db.query(AnalysisModel).filter(AnalysisModel.username == username).delete()
+        db.commit()
+        db.close()
+        return {"message": f"All data cleared for {username}"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/global-insights")
+def global_insights():
+    try:
+        db = SessionLocal()
+
+        total_analyses = db.query(AnalysisModel).count()
+
+        if total_analyses == 0:
+            db.close()
+            return {
+                "total_analyses": 0,
+                "total_users": 0,
+                "most_common_biases": [],
+                "most_dangerous_biases": [],
+                "avg_global_score": 0
+            }
+
+        total_users = db.query(func.count(distinct(AnalysisModel.username))).scalar()
+
+        avg_global_score = round(
+            db.query(func.avg(AnalysisModel.score)).scalar(), 1
+        )
+
+        bias_counts = db.query(
+            BiasRecordModel.bias_name,
+            func.count(BiasRecordModel.bias_name).label("count")
+        ).group_by(BiasRecordModel.bias_name).order_by(
+            func.count(BiasRecordModel.bias_name).desc()
+        ).limit(10).all()
+
+        most_common_biases = [
+            {"name": b.bias_name, "count": b.count}
+            for b in bias_counts
+        ]
+
+        dangerous = db.query(
+            BiasRecordModel.bias_name,
+            func.avg(AnalysisModel.score).label("avg_score"),
+            func.count(BiasRecordModel.bias_name).label("count")
+        ).join(
+            AnalysisModel, BiasRecordModel.analysis_id == AnalysisModel.id
+        ).group_by(
+            BiasRecordModel.bias_name
+        ).having(
+            func.count(BiasRecordModel.bias_name) >= 1
+        ).order_by(
+            func.avg(AnalysisModel.score).asc()
+        ).limit(5).all()
+
+        most_dangerous_biases = [
+            {
+                "name": d.bias_name,
+                "avg_score": round(d.avg_score, 1),
+                "count": d.count
+            }
+            for d in dangerous
+        ]
+
+        db.close()
+
+        return {
+            "total_analyses": total_analyses,
+            "total_users": total_users,
+            "avg_global_score": avg_global_score,
+            "most_common_biases": most_common_biases,
+            "most_dangerous_biases": most_dangerous_biases
+        }
+
+    except Exception as e:
+        print("ERROR:", str(e))
         raise HTTPException(status_code=500, detail=str(e))

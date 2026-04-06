@@ -4,3 +4,4 @@ google-generativeai
 sqlalchemy
 aiofiles
 pydantic
+slowapi

@@ -13,6 +13,7 @@ class AnalysisModel(Base):
     __tablename__ = "analyses"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
+    username = Column(String, index=True)
     text = Column(String)
     score = Column(Integer)
     summary = Column(String)
@@ -23,6 +24,7 @@ class BiasRecordModel(Base):
     __tablename__ = "bias_records"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
+    username = Column(String, index=True)
     bias_name = Column(String)
     explanation = Column(String)
     analysis_id = Column(Integer)
