@@ -24,7 +24,7 @@ An advanced AI-powered critical thinking tool that identifies psychological shor
 
 ### 📸 How It Works
 
-
+![MindLens Analysis Dashboard](https://raw.githubusercontent.com/Ayushi-324/MindLens/main/screenshot.png)
 
 1. **Input:** Paste any argument, investment pitch, or decision-making text.
 2. **Analyze:** The AI engine scans for emotional triggers and logical gaps.
@@ -42,17 +42,16 @@ cd MindLens
 pip install -r requirements.txt
 
 # 3. Set up Environment Variables (.env)
+# Create a .env file and add:
 GEMINI_API_KEY="your_api_key_here"
 DATABASE_URL="sqlite:///./mindlens.db" 
 
 # 4. Run the application
 uvicorn main:app --reload
-
-Method,Endpoint,Description
-POST,/analyze,Submits text for bias detection and scoring
-GET,/history/{user},Retrieves past analysis for a specific user
-GET,/profile/{user},"Returns the ""Cognitive DNA"" stats for a user"
-GET,/global-insights,Aggregates anonymized data for all users
-GET,/compare/{user},"Calculates the ""You vs Global"" comparison"
-
-Developed by Ayushi Tyagi 🚀
+📁 Project StructurePlaintextMindLens/
+├── main.py           # FastAPI server & AI logic
+├── database.py       # SQLAlchemy models & Database connection
+├── index.html        # Single-page Application UI
+├── requirements.txt  # Python dependencies
+└── .gitignore        # Keeps API keys and DB files private
+🌐 API EndpointsMethodEndpointDescriptionPOST/analyzeSubmits text for bias detection and scoringGET/history/{user}Retrieves past analysis for a specific userGET/profile/{user}Returns the "Cognitive DNA" stats for a userGET/global-insightsAggregates anonymized data for all usersGET/compare/{user}Calculates the "You vs Global" comparisonDeveloped by Ayushi Tyagi 🚀
