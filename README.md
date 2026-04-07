@@ -4,7 +4,7 @@
   <img src="assets/WELCOME.png" width="400" alt="MindLens Dashboard">
 </p>
 
-An advanced AI-powered critical thinking tool that identifies psychological shortcuts and logical fallacies in text. **MindLens** helps users deconstruct their decision-making process by quantifying the quality of their reasoning.
+An advanced AI-powered critical thinking tool that identifies psychological shortcuts and logical fallacies in text. **MindLens** helps you deconstruct your decision-making process by quantifying the quality of your reasoning.
 
 🚀 **[Live Demo](https://mindlens-app.onrender.com)**
 
@@ -29,14 +29,14 @@ An advanced AI-powered critical thinking tool that identifies psychological shor
 ### 📸 How It Works
 
 <p align="center">
-  <img src="assets/Biases.png" width="200" alt="MindLens Dashboard">
+  <img src="assets/Biases.png" width="400" alt="MindLens Dashboard">
 </p>
 
 1. **Input:** Paste any argument, investment pitch, or decision-making text.
 2. **Analyze:** The AI engine scans for emotional triggers and logical gaps.
 
 <p align="center">
-  <img src="assets/Reasoning Score.png" width="400" alt="MindLens Dashboard">
+  <img src="assets/Reasoning Score.png" width="600" alt="MindLens Dashboard">
 </p>
 
 3. **Growth:** Visit the **Profile** tab to see your long-term cognitive patterns.
@@ -66,6 +66,7 @@ uvicorn main:app --reload
 ### 📁 Project Structure
 
 MindLens/
+
 ├── main.py           # FastAPI server & AI logic
 
 ├── database.py       # SQLAlchemy models & Database connection
@@ -89,4 +90,4 @@ MindLens/
 | **GET** | `/compare/{user}` | Calculates the "You vs Global" comparison |
 
 ---
-**Developed by [Ayushi Tyagi](https://github.com/Ayushi-324)** 🚀
+**Developed by [Ayushi Tyagi](https://github.com/Ayushi-324)** 
