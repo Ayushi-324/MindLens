@@ -31,6 +31,10 @@ An advanced AI-powered critical thinking tool that identifies psychological shor
 3. **Result:** View your reasoning score and a breakdown of detected biases.
 4. **Growth:** Visit the **Profile** tab to see your long-term cognitive patterns.
 
+<p align="center">
+  <img src="assets/Biases.png" width="600" alt="MindLens Dashboard">
+</p>
+
 ### 📦 Installation
 
 ```bash
