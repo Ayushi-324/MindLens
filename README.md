@@ -49,6 +49,8 @@ An advanced AI-powered critical thinking tool that identifies psychological shor
 
 * **Clone the repository**
 git clone https://github.com/Ayushi-324/MindLens.git
+
+* **Enter the Directory**
 cd MindLens
 
 * **Install dependencies**
