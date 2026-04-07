@@ -45,26 +45,23 @@ An advanced AI-powered critical thinking tool that identifies psychological shor
   <img src="assets/YOU vs Global Average.png" width="400" alt="MindLens Dashboard">
 </p>
 
----
-
 ### 📦 Installation
 
-```bash
-### 📦 Installation
-
-# 1. Clone the repository
+* 1. **Clone the repository**
 git clone https://github.com/Ayushi-324/MindLens.git
 cd MindLens
 
-# 2. Install dependencies
+* 2. **Install dependencies**
 pip install -r requirements.txt
 
-# 3. Set up Environment Variables (.env)
-GEMINI_API_KEY="your_api_key_here"
+* 3. **Set up Environment Variables (.env)**
+GEMINI_API_KEY="api_key_here"
 DATABASE_URL="sqlite:///./mindlens.db" 
 
-# 4. Run the application
+* 4. **Run the application**
 uvicorn main:app --reload
+
+---
 
 ### 📁 Project Structure
 
@@ -74,6 +71,8 @@ MindLens/
 ├── index.html        # Single-page Application UI
 ├── requirements.txt  # Python dependencies
 └── .gitignore        # Keeps API keys and DB files private
+
+---
 
 ### 🌐 API Endpoints
 
