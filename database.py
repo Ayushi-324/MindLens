@@ -1,13 +1,24 @@
+import os
 from sqlalchemy import create_engine, Column, String, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-DATABASE_URL = "sqlite:///./mindlens.db"
+# Get the database URL from the internet (if we are live)
+# If it doesn't exist, fall back to our local SQLite file
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./mindlens.db")
 
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+# Cloud databases sometimes use 'postgres://', but SQLAlchemy requires 'postgresql://'
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+# SQLite needs a special rule, PostgreSQL doesn't
+if DATABASE_URL.startswith("sqlite"):
+    engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+else:
+    engine = create_engine(DATABASE_URL)
+
 SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
-
 
 class AnalysisModel(Base):
     __tablename__ = "analyses"
@@ -28,6 +39,5 @@ class BiasRecordModel(Base):
     bias_name = Column(String)
     explanation = Column(String)
     analysis_id = Column(Integer)
-
 
 Base.metadata.create_all(bind=engine)
