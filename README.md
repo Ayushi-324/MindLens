@@ -1,5 +1,10 @@
 # 🧠 MindLens — Cognitive Bias Detector
 
+<p align="center">
+  <img src="assets/WELCOME.png" width="400" alt="MindLens Dashboard">
+</p>
+
+
 An advanced AI-powered critical thinking tool that identifies psychological shortcuts and logical fallacies in text. **MindLens** helps users deconstruct their decision-making process by quantifying the quality of their reasoning.
 
 🚀 **[Live Demo](https://mindlens-app.onrender.com)**
@@ -24,22 +29,32 @@ An advanced AI-powered critical thinking tool that identifies psychological shor
 
 ### 📸 How It Works
 
-![MindLens Analysis Dashboard](https://raw.githubusercontent.com/Ayushi-324/MindLens/main/screenshot.png)
+<p align="center">
+  <img src="assets/Biases.png" width="200" alt="MindLens Dashboard">
+</p>
 
 1. **Input:** Paste any argument, investment pitch, or decision-making text.
 2. **Analyze:** The AI engine scans for emotional triggers and logical gaps.
 3. **Result:** View your reasoning score and a breakdown of detected biases.
-4. **Growth:** Visit the **Profile** tab to see your long-term cognitive patterns.
 
 <p align="center">
-  <img src="assets/Biases.png" width="600" alt="MindLens Dashboard">
+  <img src="assets/Reasoning Score.png" width="400" alt="MindLens Dashboard">
+</p>
+
+<p align="center">
+  <img src="assets/Cognitive bias.png" width="400" alt="MindLens Dashboard">
+</p>
+
+5. **Growth:** Visit the **Profile** tab to see your long-term cognitive patterns.
+
+<p align="center">
+  <img src="assets/YOU vs Global Average.png" width="400" alt="MindLens Dashboard">
 </p>
 
 ### 📦 Installation
 
-```bash
 # 1. Clone the repository
-git clone [https://github.com/Ayushi-324/MindLens.git](https://github.com/Ayushi-324/MindLens.git)
+git clone https://github.com/Ayushi-324/MindLens.git
 cd MindLens
 
 # 2. Install dependencies
@@ -48,14 +63,27 @@ pip install -r requirements.txt
 # 3. Set up Environment Variables (.env)
 # Create a .env file and add:
 GEMINI_API_KEY="your_api_key_here"
-DATABASE_URL="sqlite:///./mindlens.db" 
+DATABASE_URL="sqlite:///./mindlens.db"  # Use your Postgres URL for production
 
 # 4. Run the application
 uvicorn main:app --reload
-📁 Project StructurePlaintextMindLens/
+
+### 📁 Project Structure
+
+MindLens/
 ├── main.py           # FastAPI server & AI logic
 ├── database.py       # SQLAlchemy models & Database connection
 ├── index.html        # Single-page Application UI
 ├── requirements.txt  # Python dependencies
 └── .gitignore        # Keeps API keys and DB files private
-🌐 API EndpointsMethodEndpointDescriptionPOST/analyzeSubmits text for bias detection and scoringGET/history/{user}Retrieves past analysis for a specific userGET/profile/{user}Returns the "Cognitive DNA" stats for a userGET/global-insightsAggregates anonymized data for all usersGET/compare/{user}Calculates the "You vs Global" comparisonDeveloped by Ayushi Tyagi 🚀
+
+### 🌐 API Endpoints
+
+Method,Endpoint,Description
+POST,/analyze,Submits text for bias detection and scoring
+GET,/history/{user},Retrieves past analysis for a specific user
+GET,/profile/{user},"Returns the ""Cognitive DNA"" stats for a user"
+GET,/global-insights,Aggregates anonymized data for all users
+GET,/compare/{user},"Calculates the ""You vs Global"" comparison"
+
+Developed by Ayushi Tyagi 
