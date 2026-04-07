@@ -514,6 +514,18 @@
             margin-top: 48px;
             line-height: 1.6;
         }
+
+        /* YOU VS GLOBAL STYLES */
+        .compare-row { display: flex; gap: 16px; margin-bottom: 16px; }
+        .compare-box { flex: 1; background: #0f1117; border-radius: 12px; padding: 20px; text-align: center; }
+        .compare-box.highlight { border: 1px solid #667eea; }
+        .compare-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #4a5568; margin-bottom: 8px; }
+        .compare-value { font-size: 32px; font-weight: bold; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .compare-sub { font-size: 12px; color: #718096; margin-top: 4px; }
+        .verdict-box { background: #0f1117; border-radius: 12px; padding: 20px; text-align: center; font-size: 15px; line-height: 1.6; margin-top: 8px; }
+        .verdict-green { color: #68d391; }
+        .verdict-red { color: #fc8181; }
+        .verdict-neutral { color: #a0aec0; }
     </style>
 </head>
 <body>
@@ -524,7 +536,6 @@
             <p>Detect cognitive biases in any text, argument, or decision</p>
         </header>
 
-        <!-- LOGIN SCREEN -->
         <div class="login-screen" id="login-screen">
             <div class="login-card">
                 <h2>Welcome to MindLens</h2>
@@ -534,7 +545,6 @@
             </div>
         </div>
 
-        <!-- MAIN APP -->
         <div class="app-screen" id="app-screen">
 
             <div class="user-bar">
@@ -549,7 +559,6 @@
                 <div class="tab" onclick="switchTab('global')">🌍 Global</div>
             </div>
 
-            <!-- ANALYZE TAB -->
             <div class="tab-content active" id="tab-analyze">
                 <div class="input-card">
                     <label>Paste your text, argument, or decision</label>
@@ -574,7 +583,6 @@
                 </div>
             </div>
 
-            <!-- PROFILE TAB -->
             <div class="tab-content" id="tab-profile">
                 <div class="profile-card">
                     <h2>🧬 Your Cognitive Bias DNA</h2>
@@ -605,12 +613,18 @@
                     </div>
                 </div>
 
+                <div class="profile-card" id="compare-card">
+                    <h2>⚔️ You vs Global Average</h2>
+                    <div id="compare-container">
+                        <p style="color: #4a5568;">Loading comparison...</p>
+                    </div>
+                </div>
+
                 <div style="text-align: right; margin-top: 8px;">
                     <button class="clear-btn" onclick="clearData()">🗑️ Clear My Data</button>
                 </div>
             </div>
 
-            <!-- HISTORY TAB -->
             <div class="tab-content" id="tab-history">
                 <div class="history-section">
                     <h2>Your Recent Analyses</h2>
@@ -620,7 +634,6 @@
                 </div>
             </div>
 
-            <!-- GLOBAL TAB -->
             <div class="tab-content" id="tab-global">
                 <div class="profile-card">
                     <h2>🌍 Global Insights</h2>
@@ -709,7 +722,8 @@
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelector(`.tab[onclick="switchTab('${tab}')"]`).classList.add('active');
             document.getElementById(`tab-${tab}`).classList.add('active');
-            if (tab === 'profile') loadProfile();
+            
+            if (tab === 'profile') { loadProfile(); loadComparison(); }
             if (tab === 'history') loadHistory();
             if (tab === 'global') loadGlobalInsights();
         }
@@ -815,6 +829,52 @@
 
             } catch (err) {
                 console.error("Profile error:", err);
+            }
+        }
+
+        async function loadComparison() {
+            try {
+                const response = await fetch(`${API}/compare/${currentUser}`);
+                const data = await response.json();
+                const container = document.getElementById('compare-container');
+                
+                if (!data.enough_data) {
+                    container.innerHTML = '<p style="color: #4a5568;">Do at least one analysis to see your comparison!</p>';
+                    return;
+                }
+                
+                const verdictClass = data.verdict_color === 'green' ? 'verdict-green' :                            
+                                     data.verdict_color === 'red' ? 'verdict-red' : 'verdict-neutral';
+                                     
+                container.innerHTML = `
+                    <div class="compare-row">
+                        <div class="compare-box highlight">
+                            <div class="compare-label">Your Avg Score</div>
+                            <div class="compare-value">${data.user_avg}</div>
+                            <div class="compare-sub">${data.user_total} analyses</div>
+                        </div>
+                        <div class="compare-box">
+                            <div class="compare-label">Global Avg Score</div>
+                            <div class="compare-value">${data.global_avg}</div>
+                            <div class="compare-sub">${data.global_total} analyses</div>
+                        </div>
+                    </div>
+                    <div class="compare-row">
+                        <div class="compare-box highlight">
+                            <div class="compare-label">Your Top Bias</div>
+                            <div style="color: #e2e8f0; font-size: 14px; margin-top: 8px;">${data.user_top_bias}</div>
+                        </div>
+                        <div class="compare-box">
+                            <div class="compare-label">Global Top Bias</div>
+                            <div style="color: #e2e8f0; font-size: 14px; margin-top: 8px;">${data.global_top_bias}</div>
+                        </div>
+                    </div>
+                    <div class="verdict-box ${verdictClass}">
+                        ${data.verdict}
+                    </div>
+                `;
+            } catch (err) {
+                console.error("Compare error:", err);
             }
         }
 

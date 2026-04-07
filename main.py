@@ -301,3 +301,76 @@ def global_insights():
     except Exception as e:
         print("ERROR:", str(e))
         raise HTTPException(status_code=500, detail=str(e))
+    # --- ADD THIS TO THE VERY BOTTOM OF YOUR MAIN.PY ---
+
+@app.get("/compare/{username}")
+def compare(username: str):
+    try:
+        db = SessionLocal()
+        
+        # User stats
+        user_analyses = db.query(AnalysisModel).filter(
+            AnalysisModel.username == username
+        ).all()
+        
+        if not user_analyses:
+            db.close()
+            return {"enough_data": False}
+            
+        user_avg = round(sum(a.score for a in user_analyses) / len(user_analyses), 1)
+        user_total = len(user_analyses)
+        
+        # Global stats
+        global_total = db.query(AnalysisModel).count()
+        
+        # Handle case where there are no global analyses
+        global_avg_scalar = db.query(func.avg(AnalysisModel.score)).scalar()
+        global_avg = round(global_avg_scalar, 1) if global_avg_scalar else 0.0
+        
+        # User top bias
+        user_biases = db.query(BiasRecordModel).filter(
+            BiasRecordModel.username == username
+        ).all()
+        user_bias_names = [b.bias_name for b in user_biases]
+        user_top_bias_calc = Counter(user_bias_names).most_common(1)
+        user_top_bias = user_top_bias_calc[0][0] if user_top_bias_calc else "None"
+        
+        # Global top bias
+        global_top = db.query(
+            BiasRecordModel.bias_name,
+            func.count(BiasRecordModel.bias_name).label("count")
+        ).group_by(BiasRecordModel.bias_name).order_by(
+            func.count(BiasRecordModel.bias_name).desc()
+        ).first()
+        global_top_bias = global_top.bias_name if global_top else "None"
+        
+        db.close()
+        
+        # Verdict logic
+        if user_avg > global_avg + 1:
+            verdict = "🏆 You reason significantly better than the average MindLens user!"
+            verdict_color = "green"
+        elif user_avg > global_avg:
+            verdict = "✅ You reason slightly better than the average MindLens user."
+            verdict_color = "green"
+        elif user_avg == global_avg:
+            verdict = "➡️ Your reasoning is on par with the average MindLens user."
+            verdict_color = "neutral"
+        else:
+            verdict = "📉 Your reasoning score is below the global average — keep practicing!"
+            verdict_color = "red"
+            
+        return {
+            "enough_data": True,
+            "user_avg": user_avg,
+            "global_avg": global_avg,
+            "user_total": user_total,
+            "global_total": global_total,
+            "user_top_bias": user_top_bias,
+            "global_top_bias": global_top_bias,
+            "verdict": verdict,
+            "verdict_color": verdict_color
+        }
+    except Exception as e:
+        print("Compare ERROR:", str(e))
+        raise HTTPException(status_code=500, detail=str(e))
