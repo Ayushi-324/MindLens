@@ -9,7 +9,7 @@ An advanced AI-powered critical thinking tool that identifies psychological shor
 🚀 **[Live Demo](https://mindlens-app.onrender.com)**
 
 > [!IMPORTANT]
-> **🚀 Live Demo Notice:** This application is hosted on an **on-demand instance**. 
+> ## 🚀 Live Demo Notice:** This application is hosted on an **on-demand instance**. 
 > Please allow **30-60 seconds** for the server to "wake up" during the initial load. 
 > Subsequent analysis is near-instant!
 
