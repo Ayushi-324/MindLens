@@ -38,6 +38,8 @@ class BiasRecordModel(Base):
     username = Column(String, index=True)
     bias_name = Column(String)
     explanation = Column(String)
+    impact = Column(String)    
+    reframe = Column(String)
     analysis_id = Column(Integer)
 
 Base.metadata.create_all(bind=engine)

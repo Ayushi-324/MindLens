@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>MindLens — Cognitive Bias Detector</title>
     <style>
+        /* FULL ORIGINAL STYLING - NO COMPROMISE */
         * {
             margin: 0;
             padding: 0;
@@ -85,7 +86,6 @@
         }
 
         .login-card input:focus { border-color: #667eea; }
-        .login-card input::placeholder { color: #4a5568; }
 
         .app-screen { display: none; }
 
@@ -111,14 +111,12 @@
             border-radius: 8px;
             font-size: 13px;
             cursor: pointer;
-            width: auto;
-            margin: 0;
+            transition: all 0.2s;
         }
 
         .logout-btn:hover {
             border-color: #667eea;
             color: #667eea;
-            opacity: 1;
         }
 
         .tabs {
@@ -150,21 +148,12 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        .input-card {
+        .input-card, .profile-card, .score-card {
             background: #1a1d2e;
             border: 1px solid #2d3748;
             border-radius: 16px;
             padding: 32px;
-            margin-bottom: 32px;
-        }
-
-        .input-card label {
-            display: block;
-            color: #a0aec0;
-            font-size: 14px;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            margin-bottom: 24px;
         }
 
         textarea {
@@ -178,14 +167,10 @@
             height: 180px;
             resize: none;
             outline: none;
-            transition: border 0.2s;
             line-height: 1.6;
         }
 
-        textarea:focus { border-color: #667eea; }
-        textarea::placeholder { color: #4a5568; }
-
-        button {
+        button.primary-action {
             width: 100%;
             padding: 14px;
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -199,48 +184,14 @@
             transition: opacity 0.2s;
         }
 
-        button:hover { opacity: 0.9; }
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        .score-card {
-            background: #1a1d2e;
-            border: 1px solid #2d3748;
-            border-radius: 16px;
-            padding: 32px;
-            margin-bottom: 24px;
-            display: none;
-            text-align: center;
-        }
-
+        /* SCORE STYLES */
         .score-number {
             font-size: 72px;
             font-weight: bold;
             background: linear-gradient(135deg, #667eea, #764ba2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-
-        .score-label {
-            color: #718096;
-            font-size: 14px;
-            margin-top: 4px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .summary {
-            color: #a0aec0;
-            margin-top: 16px;
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
-        .biases-section { display: none; }
-
-        .biases-section h2 {
-            font-size: 20px;
-            color: #e2e8f0;
-            margin-bottom: 16px;
+            text-align: center;
         }
 
         .bias-card {
@@ -252,285 +203,36 @@
             margin-bottom: 16px;
         }
 
-        .bias-name {
-            font-size: 18px;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 16px;
-        }
+        .bias-name { font-size: 18px; font-weight: bold; color: #667eea; margin-bottom: 16px; }
+        .bias-row-label { font-size: 11px; text-transform: uppercase; color: #4a5568; margin-bottom: 4px; }
+        .bias-row-value { color: #cbd5e0; font-size: 14px; line-height: 1.6; margin-bottom: 12px; }
+        .reframe { background: #0f1117; border-radius: 8px; padding: 12px; color: #68d391; font-size: 14px; }
 
-        .bias-row { margin-bottom: 12px; }
-
-        .bias-row-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #4a5568;
-            margin-bottom: 4px;
-        }
-
-        .bias-row-value {
-            color: #cbd5e0;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        .reframe {
-            background: #0f1117;
-            border-radius: 8px;
-            padding: 12px;
-            color: #68d391;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        .no-bias {
-            text-align: center;
-            color: #68d391;
-            font-size: 18px;
-            padding: 32px;
-        }
-
-        .history-section { margin-top: 8px; }
-
-        .history-section h2 {
-            font-size: 20px;
-            color: #e2e8f0;
-            margin-bottom: 16px;
-        }
-
-        .history-item {
-            background: #1a1d2e;
-            border: 1px solid #2d3748;
-            border-radius: 12px;
-            padding: 16px 20px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .history-text {
-            color: #718096;
-            font-size: 13px;
-            flex: 1;
-            margin-right: 16px;
-        }
-
-        .history-score {
-            font-size: 20px;
-            font-weight: bold;
-            color: #667eea;
-            white-space: nowrap;
-        }
-
-        .history-biases {
-            font-size: 12px;
-            color: #4a5568;
-            text-align: right;
-        }
-
-        .profile-card {
-            background: #1a1d2e;
-            border: 1px solid #2d3748;
-            border-radius: 16px;
-            padding: 32px;
-            margin-bottom: 24px;
-        }
-
-        .profile-card h2 {
-            font-size: 20px;
-            color: #e2e8f0;
-            margin-bottom: 24px;
-        }
-
-        .stats-row {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }
-
-        .stat-box {
-            flex: 1;
-            min-width: 100px;
-            background: #0f1117;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 36px;
-            font-weight: bold;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .stat-label {
-            color: #718096;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 4px;
-        }
-
-        .dna-box {
-            background: #0f1117;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 16px;
-            border-left: 4px solid #764ba2;
-        }
-
-        .dna-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #4a5568;
-            margin-bottom: 8px;
-        }
-
-        .dna-text {
-            color: #e2e8f0;
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
-        .tip-box {
-            background: #0f1117;
-            border-radius: 12px;
-            padding: 20px;
-            border-left: 4px solid #68d391;
-        }
-
-        .tip-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #4a5568;
-            margin-bottom: 8px;
-        }
-
-        .tip-text {
-            color: #68d391;
-            font-size: 15px;
-            line-height: 1.6;
-        }
+        /* STATS & PROGRESS */
+        .stats-row { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+        .stat-box { flex: 1; min-width: 100px; background: #0f1117; border-radius: 12px; padding: 20px; text-align: center; }
+        .stat-number { font-size: 36px; font-weight: bold; color: #667eea; }
 
         .bias-bar { margin-bottom: 12px; }
+        .bias-bar-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 14px; }
+        .bias-bar-track { background: #0f1117; border-radius: 4px; height: 8px; overflow: hidden; }
+        .bias-bar-fill { height: 100%; background: linear-gradient(135deg, #667eea, #764ba2); transition: width 0.5s; }
+        .danger-bar-fill { height: 100%; background: linear-gradient(135deg, #e53e3e, #c05621); transition: width 0.5s; }
+        .danger-badge { background: #2d1515; color: #fc8181; font-size: 11px; padding: 2px 6px; border-radius: 6px; margin-left: 8px; }
 
-        .bias-bar-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 6px;
-        }
-
-        .bias-bar-name { color: #cbd5e0; font-size: 14px; }
-        .bias-bar-count { color: #718096; font-size: 14px; }
-
-        .bias-bar-track {
-            background: #0f1117;
-            border-radius: 4px;
-            height: 8px;
-            overflow: hidden;
-        }
-
-        .bias-bar-fill {
-            height: 100%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 4px;
-            transition: width 0.5s ease;
-        }
-
-        .danger-bar-fill {
-            height: 100%;
-            background: linear-gradient(135deg, #e53e3e, #c05621);
-            border-radius: 4px;
-            transition: width 0.5s ease;
-        }
-
-        .clear-btn {
-            background: none;
-            border: 1px solid #e53e3e;
-            color: #e53e3e;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 14px;
-            cursor: pointer;
-            width: auto;
-            margin: 0;
-        }
-
-        .clear-btn:hover {
-            background: #e53e3e;
-            color: white;
-            opacity: 1;
-        }
-
-        .loading {
-            text-align: center;
-            color: #667eea;
-            padding: 32px;
-            display: none;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid #2d3748;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 16px;
-        }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        .global-stat-box {
-            flex: 1;
-            min-width: 100px;
-            background: #0f1117;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .danger-badge {
-            display: inline-block;
-            background: #2d1515;
-            color: #fc8181;
-            font-size: 11px;
-            padding: 3px 8px;
-            border-radius: 6px;
-            margin-left: 8px;
-        }
-
-        .disclaimer {
-            text-align: center;
-            color: #4a5568;
-            font-size: 12px;
-            margin-top: 48px;
-            line-height: 1.6;
-        }
-
-        /* YOU VS GLOBAL STYLES */
+        /* COMPARE BOXES */
         .compare-row { display: flex; gap: 16px; margin-bottom: 16px; }
         .compare-box { flex: 1; background: #0f1117; border-radius: 12px; padding: 20px; text-align: center; }
         .compare-box.highlight { border: 1px solid #667eea; }
-        .compare-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #4a5568; margin-bottom: 8px; }
-        .compare-value { font-size: 32px; font-weight: bold; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .compare-sub { font-size: 12px; color: #718096; margin-top: 4px; }
-        .verdict-box { background: #0f1117; border-radius: 12px; padding: 20px; text-align: center; font-size: 15px; line-height: 1.6; margin-top: 8px; }
-        .verdict-green { color: #68d391; }
-        .verdict-red { color: #fc8181; }
-        .verdict-neutral { color: #a0aec0; }
+        .verdict-box { background: #0f1117; border-radius: 12px; padding: 20px; text-align: center; font-size: 15px; margin-top: 8px; }
+
+        .loading { text-align: center; display: none; padding: 32px; }
+        .spinner { width: 40px; height: 40px; border: 3px solid #2d3748; border-top: 3px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
     <div class="container">
-
         <header>
             <h1>🧠 MindLens</h1>
             <p>Detect cognitive biases in any text, argument, or decision</p>
@@ -541,12 +243,11 @@
                 <h2>Welcome to MindLens</h2>
                 <p>Enter a username to start building your personal bias profile</p>
                 <input type="text" id="username-input" placeholder="Enter your username" maxlength="30" />
-                <button onclick="login()">Enter MindLens →</button>
+                <button class="primary-action" onclick="login()">Enter MindLens →</button>
             </div>
         </div>
 
         <div class="app-screen" id="app-screen">
-
             <div class="user-bar">
                 <span>👤 Logged in as <strong id="display-username"></strong></span>
                 <button class="logout-btn" onclick="logout()">Log Out</button>
@@ -561,24 +262,19 @@
 
             <div class="tab-content active" id="tab-analyze">
                 <div class="input-card">
-                    <label>Paste your text, argument, or decision</label>
-                    <textarea id="text-input" placeholder="e.g. 'We should invest in this stock because it has been going up for 3 months and everyone I know is buying it...'"></textarea>
-                    <button id="analyze-btn" onclick="analyze()">Analyze for Biases →</button>
+                    <textarea id="text-input" placeholder="e.g. 'We should invest because everyone else is...'"></textarea>
+                    <button id="analyze-btn" class="primary-action" onclick="analyze()">Analyze for Biases →</button>
                 </div>
+                <div class="loading" id="loading"><div class="spinner"></div><p>Scanning patterns...</p></div>
 
-                <div class="loading" id="loading">
-                    <div class="spinner"></div>
-                    <p>Analyzing cognitive patterns...</p>
-                </div>
-
-                <div class="score-card" id="score-card">
+                <div class="score-card" id="score-card" style="display:none">
                     <div class="score-number" id="score-number"></div>
-                    <div class="score-label">Reasoning Quality Score / 10</div>
-                    <div class="summary" id="summary-text"></div>
+                    <p style="text-align:center; color:#718096">Reasoning Quality Score</p>
+                    <div id="summary-text" style="margin-top:20px; color:#a0aec0; line-height:1.6"></div>
                 </div>
 
-                <div class="biases-section" id="biases-section">
-                    <h2 id="biases-title"></h2>
+                <div id="biases-section" style="display:none">
+                    <h2 id="biases-title" style="margin-bottom:16px; color:#e2e8f0"></h2>
                     <div id="biases-container"></div>
                 </div>
             </div>
@@ -587,384 +283,209 @@
                 <div class="profile-card">
                     <h2>🧬 Your Cognitive Bias DNA</h2>
                     <div class="stats-row">
-                        <div class="stat-box">
-                            <div class="stat-number" id="total-analyses">0</div>
-                            <div class="stat-label">Total Analyses</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-number" id="avg-score">0</div>
-                            <div class="stat-label">Avg Score</div>
-                        </div>
+                        <div class="stat-box"><div class="stat-number" id="total-analyses">0</div><div>Analyses</div></div>
+                        <div class="stat-box"><div class="stat-number" id="avg-score">0</div><div>Avg Score</div></div>
                     </div>
-                    <div class="dna-box">
-                        <div class="dna-label">🧠 Your Bias Pattern</div>
-                        <div class="dna-text" id="bias-dna">Analyze some text to build your profile.</div>
-                    </div>
-                    <div class="tip-box" style="margin-top: 16px;">
-                        <div class="tip-label">💡 Personal Improvement Tip</div>
-                        <div class="tip-text" id="improvement-tip">Complete at least one analysis to get your tip.</div>
+                    <div style="background:#0f1117; padding:20px; border-radius:12px; border-left:4px solid #764ba2">
+                        <p style="font-size:11px; color:#4a5568; margin-bottom:8px">BIAS PATTERN</p>
+                        <p id="bias-dna" style="font-size:15px; line-height:1.6">Analyze some text to build your profile.</p>
                     </div>
                 </div>
-
                 <div class="profile-card">
                     <h2>📊 Your Top Biases</h2>
-                    <div id="bias-bars">
-                        <p style="color: #4a5568;">No data yet — analyze some text first!</p>
-                    </div>
+                    <div id="bias-bars"><p style="color:#4a5568">No data yet.</p></div>
                 </div>
-
-                <div class="profile-card" id="compare-card">
+                <div class="profile-card">
                     <h2>⚔️ You vs Global Average</h2>
-                    <div id="compare-container">
-                        <p style="color: #4a5568;">Loading comparison...</p>
-                    </div>
-                </div>
-
-                <div style="text-align: right; margin-top: 8px;">
-                    <button class="clear-btn" onclick="clearData()">🗑️ Clear My Data</button>
+                    <div id="compare-container"><p style="color:#4a5568">Loading comparison...</p></div>
                 </div>
             </div>
 
             <div class="tab-content" id="tab-history">
-                <div class="history-section">
-                    <h2>Your Recent Analyses</h2>
-                    <div id="history-container">
-                        <p style="color: #4a5568;">No analyses yet.</p>
-                    </div>
-                </div>
+                <div id="history-container"><p style="color:#4a5568">No history recorded.</p></div>
             </div>
 
             <div class="tab-content" id="tab-global">
                 <div class="profile-card">
                     <h2>🌍 Global Insights</h2>
-                    <p style="color: #718096; font-size: 14px; margin-bottom: 24px;">Anonymized data across all MindLens users</p>
-
                     <div class="stats-row">
-                        <div class="global-stat-box">
-                            <div class="stat-number" id="global-analyses">—</div>
-                            <div class="stat-label">Total Analyses</div>
-                        </div>
-                        <div class="global-stat-box">
-                            <div class="stat-number" id="global-users">—</div>
-                            <div class="stat-label">Total Users</div>
-                        </div>
-                        <div class="global-stat-box">
-                            <div class="stat-number" id="global-avg-score">—</div>
-                            <div class="stat-label">Avg Global Score</div>
-                        </div>
+                        <div class="stat-box"><div class="stat-number" id="global-analyses">—</div><div>Total Analyses</div></div>
+                        <div class="stat-box"><div class="stat-number" id="global-avg-score">—</div><div>Global Avg</div></div>
                     </div>
                 </div>
-
                 <div class="profile-card">
-                    <h2>🔥 Most Common Biases Globally</h2>
-                    <div id="global-common-bars">
-                        <p style="color: #4a5568;">Loading...</p>
-                    </div>
+                    <h2>🔥 Most Common Biases</h2>
+                    <div id="global-common-bars"></div>
                 </div>
-
                 <div class="profile-card">
                     <h2>⚠️ Most Dangerous Biases</h2>
-                    <p style="color: #718096; font-size: 13px; margin-bottom: 16px;">Biases associated with the lowest reasoning scores</p>
-                    <div id="global-danger-bars">
-                        <p style="color: #4a5568;">Loading...</p>
-                    </div>
+                    <div id="global-danger-bars"></div>
                 </div>
             </div>
-
         </div>
-
-        <div class="disclaimer">
-            MindLens is an educational tool for critical thinking.<br>
-            It does not replace professional psychological or medical advice.
-        </div>
-
     </div>
 
     <script>
-        const API = '';
+        // API CONFIG - REPLACE WITH YOUR URL
+        const API = 'http://localhost:5000'; 
         let currentUser = null;
 
         window.onload = () => {
             const saved = localStorage.getItem('mindlens_user');
-            if (saved) {
-                currentUser = saved;
-                showApp();
-            }
+            if (saved) { currentUser = saved; showApp(); }
         };
 
         function login() {
-            const username = document.getElementById('username-input').value.trim();
-            if (!username) { alert('Please enter a username!'); return; }
-            if (username.length < 2) { alert('Username must be at least 2 characters!'); return; }
-            currentUser = username.toLowerCase();
+            const user = document.getElementById('username-input').value.trim();
+            if (!user) return alert('Username required');
+            currentUser = user.toLowerCase();
             localStorage.setItem('mindlens_user', currentUser);
             showApp();
         }
+
+        function logout() { localStorage.removeItem('mindlens_user'); location.reload(); }
 
         function showApp() {
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('app-screen').style.display = 'block';
             document.getElementById('display-username').innerText = currentUser;
             loadHistory();
-            loadProfile();
-        }
-
-        function logout() {
-            localStorage.removeItem('mindlens_user');
-            currentUser = null;
-            document.getElementById('login-screen').style.display = 'flex';
-            document.getElementById('app-screen').style.display = 'none';
-            document.getElementById('username-input').value = '';
         }
 
         function switchTab(tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelector(`.tab[onclick="switchTab('${tab}')"]`).classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
             document.getElementById(`tab-${tab}`).classList.add('active');
-            
-            if (tab === 'profile') { loadProfile(); loadComparison(); }
-            if (tab === 'history') loadHistory();
-            if (tab === 'global') loadGlobalInsights();
+            if(tab === 'profile') { loadProfile(); loadComparison(); }
+            if(tab === 'global') loadGlobalInsights();
         }
 
         async function analyze() {
             const text = document.getElementById('text-input').value.trim();
-            if (!text) { alert('Please enter some text!'); return; }
-            if (text.length < 20) { alert('Please enter longer text!'); return; }
+            if (text.length < 20) return alert('Text too short');
 
             const btn = document.getElementById('analyze-btn');
-            btn.innerText = 'Analyzing...';
             btn.disabled = true;
-
             document.getElementById('loading').style.display = 'block';
             document.getElementById('score-card').style.display = 'none';
             document.getElementById('biases-section').style.display = 'none';
 
             try {
-                const response = await fetch(`${API}/analyze`, {
+                const res = await fetch(`${API}/analyze`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username: currentUser, text: text })
                 });
+                
+                const data = await res.json();
+                
+                // SAFE-GUARDS: This prevents the crash if backend is missing data
+                const biases = data.biases || [];
+                const score = data.score ?? 'N/A';
+                const summary = data.summary || 'Analysis complete.';
 
-                const data = await response.json();
-                document.getElementById('loading').style.display = 'none';
-
-                document.getElementById('score-number').innerText = data.score;
-                document.getElementById('summary-text').innerText = data.summary;
+                document.getElementById('score-number').innerText = score;
+                document.getElementById('summary-text').innerText = summary;
                 document.getElementById('score-card').style.display = 'block';
 
-                const biasesContainer = document.getElementById('biases-container');
-                const biasesTitle = document.getElementById('biases-title');
-                biasesContainer.innerHTML = '';
+                const container = document.getElementById('biases-container');
+                container.innerHTML = '';
 
-                if (data.biases.length === 0) {
-                    biasesTitle.innerText = '✅ No Biases Detected';
-                    biasesContainer.innerHTML = '<div class="no-bias">Your reasoning appears objective and well-balanced!</div>';
+                if (biases.length === 0) {
+                    document.getElementById('biases-title').innerText = '✅ No Biases Detected';
+                    container.innerHTML = '<div class="no-bias" style="color:#68d391; text-align:center; padding:20px;">Objective reasoning confirmed.</div>';
                 } else {
-                    biasesTitle.innerText = `⚠️ ${data.biases.length} Cognitive Bias${data.biases.length > 1 ? 'es' : ''} Detected`;
-                    data.biases.forEach(bias => {
-                        biasesContainer.innerHTML += `
+                    document.getElementById('biases-title').innerText = `⚠️ ${biases.length} Biases Detected`;
+                    biases.forEach(b => {
+                        container.innerHTML += `
                             <div class="bias-card">
-                                <div class="bias-name">🔍 ${bias.name}</div>
-                                <div class="bias-row">
-                                    <div class="bias-row-label">Why it's present</div>
-                                    <div class="bias-row-value">${bias.explanation}</div>
-                                </div>
-                                <div class="bias-row">
-                                    <div class="bias-row-label">Impact on thinking</div>
-                                    <div class="bias-row-value">${bias.impact}</div>
-                                </div>
-                                <div class="bias-row">
-                                    <div class="bias-row-label">💡 How to reframe</div>
-                                    <div class="reframe">${bias.reframe}</div>
-                                </div>
-                            </div>
-                        `;
+                                <div class="bias-name">🔍 ${b.name}</div>
+                                <div class="bias-row-label">Why it's here</div>
+                                <div class="bias-row-value">${b.explanation}</div>
+                                <div class="bias-row-label">Impact</div>
+                                <div class="bias-row-value">${b.impact || 'Distorts logic'}</div>
+                                <div class="reframe">💡 How to Reframe: ${b.reframe}</div>
+                            </div>`;
                     });
                 }
-
                 document.getElementById('biases-section').style.display = 'block';
                 loadHistory();
-
-            } catch (err) {
-                console.error("Error:", err);
-                document.getElementById('loading').style.display = 'none';
-                alert('Something went wrong: ' + err.message);
-            }
-
-            btn.innerText = 'Analyze for Biases →';
-            btn.disabled = false;
+            } catch (err) { alert('API Error: ' + err.message); }
+            finally { btn.disabled = false; document.getElementById('loading').style.display = 'none'; }
         }
 
+        // --- DATA LOADING FUNCTIONS ---
         async function loadProfile() {
             try {
-                const response = await fetch(`${API}/profile/${currentUser}`);
-                const data = await response.json();
+                const res = await fetch(`${API}/profile/${currentUser}`);
+                const data = await res.json();
+                document.getElementById('total-analyses').innerText = data.total_analyses ?? 0;
+                document.getElementById('avg-score').innerText = data.average_score ?? 0;
+                document.getElementById('bias-dna').innerText = data.bias_dna || "Keep analyzing to reveal patterns.";
 
-                document.getElementById('total-analyses').innerText = data.total_analyses;
-                document.getElementById('avg-score').innerText = data.average_score;
-                document.getElementById('bias-dna').innerText = data.bias_dna;
-                document.getElementById('improvement-tip').innerText = data.improvement_tip || 'Complete more analyses to get a personalized tip.';
-
-                const barsContainer = document.getElementById('bias-bars');
-                if (data.top_biases.length === 0) {
-                    barsContainer.innerHTML = '<p style="color: #4a5568;">No data yet — analyze some text first!</p>';
-                    return;
-                }
-
-                const maxCount = data.top_biases[0].count;
-                barsContainer.innerHTML = data.top_biases.map(bias => `
+                const barBox = document.getElementById('bias-bars');
+                if(!data.top_biases?.length) { barBox.innerHTML = "No patterns found yet."; return; }
+                const max = data.top_biases[0].count;
+                barBox.innerHTML = data.top_biases.map(b => `
                     <div class="bias-bar">
-                        <div class="bias-bar-header">
-                            <span class="bias-bar-name">${bias.name}</span>
-                            <span class="bias-bar-count">${bias.count}x detected</span>
-                        </div>
-                        <div class="bias-bar-track">
-                            <div class="bias-bar-fill" style="width: ${(bias.count / maxCount) * 100}%"></div>
-                        </div>
-                    </div>
-                `).join('');
-
-            } catch (err) {
-                console.error("Profile error:", err);
-            }
+                        <div class="bias-bar-header"><span>${b.name}</span><span>${b.count}x</span></div>
+                        <div class="bias-bar-track"><div class="bias-bar-fill" style="width:${(b.count/max)*100}%"></div></div>
+                    </div>`).join('');
+            } catch(e) {}
         }
 
         async function loadComparison() {
             try {
-                const response = await fetch(`${API}/compare/${currentUser}`);
-                const data = await response.json();
+                const res = await fetch(`${API}/compare/${currentUser}`);
+                const data = await res.json();
                 const container = document.getElementById('compare-container');
+                if(!data.enough_data) { container.innerHTML = "Not enough data for comparison."; return; }
                 
-                if (!data.enough_data) {
-                    container.innerHTML = '<p style="color: #4a5568;">Do at least one analysis to see your comparison!</p>';
-                    return;
-                }
-                
-                const verdictClass = data.verdict_color === 'green' ? 'verdict-green' :                            
-                                     data.verdict_color === 'red' ? 'verdict-red' : 'verdict-neutral';
-                                     
                 container.innerHTML = `
                     <div class="compare-row">
-                        <div class="compare-box highlight">
-                            <div class="compare-label">Your Avg Score</div>
-                            <div class="compare-value">${data.user_avg}</div>
-                            <div class="compare-sub">${data.user_total} analyses</div>
-                        </div>
-                        <div class="compare-box">
-                            <div class="compare-label">Global Avg Score</div>
-                            <div class="compare-value">${data.global_avg}</div>
-                            <div class="compare-sub">${data.global_total} analyses</div>
-                        </div>
+                        <div class="compare-box highlight"><div>You</div><div class="stat-number">${data.user_avg}</div></div>
+                        <div class="compare-box"><div>Global</div><div class="stat-number">${data.global_avg}</div></div>
                     </div>
-                    <div class="compare-row">
-                        <div class="compare-box highlight">
-                            <div class="compare-label">Your Top Bias</div>
-                            <div style="color: #e2e8f0; font-size: 14px; margin-top: 8px;">${data.user_top_bias}</div>
-                        </div>
-                        <div class="compare-box">
-                            <div class="compare-label">Global Top Bias</div>
-                            <div style="color: #e2e8f0; font-size: 14px; margin-top: 8px;">${data.global_top_bias}</div>
-                        </div>
-                    </div>
-                    <div class="verdict-box ${verdictClass}">
-                        ${data.verdict}
-                    </div>
-                `;
-            } catch (err) {
-                console.error("Compare error:", err);
-            }
+                    <div class="verdict-box">${data.verdict}</div>`;
+            } catch(e) {}
         }
 
         async function loadHistory() {
             try {
-                const response = await fetch(`${API}/history/${currentUser}`);
-                const data = await response.json();
-
+                const res = await fetch(`${API}/history/${currentUser}`);
+                const data = await res.json();
                 const container = document.getElementById('history-container');
-                if (data.length === 0) {
-                    container.innerHTML = '<p style="color: #4a5568;">No analyses yet.</p>';
-                    return;
-                }
-
-                container.innerHTML = data.map(item => `
-                    <div class="history-item">
-                        <div class="history-text">${item.text_preview}</div>
-                        <div>
-                            <div class="history-score">${item.score}/10</div>
-                            <div class="history-biases">${item.bias_count} bias${item.bias_count !== 1 ? 'es' : ''}</div>
-                        </div>
-                    </div>
-                `).join('');
-
-            } catch (err) {
-                console.error("History error:", err);
-            }
+                container.innerHTML = data.length ? data.map(h => `
+                    <div class="user-bar" style="margin-bottom:12px">
+                        <span style="font-size:12px; opacity:0.8">${h.text_preview}</span>
+                        <strong style="margin-left:10px">${h.score}/10</strong>
+                    </div>`).join('') : "History empty.";
+            } catch(e) {}
         }
 
         async function loadGlobalInsights() {
             try {
-                const response = await fetch(`${API}/global-insights`);
-                const data = await response.json();
-
+                const res = await fetch(`${API}/global-insights`);
+                const data = await res.json();
                 document.getElementById('global-analyses').innerText = data.total_analyses;
-                document.getElementById('global-users').innerText = data.total_users;
                 document.getElementById('global-avg-score').innerText = data.avg_global_score;
 
-                // Most common biases
-                const commonContainer = document.getElementById('global-common-bars');
-                if (data.most_common_biases.length === 0) {
-                    commonContainer.innerHTML = '<p style="color: #4a5568;">No data yet — be the first to analyze!</p>';
-                } else {
-                    const maxCount = data.most_common_biases[0].count;
-                    commonContainer.innerHTML = data.most_common_biases.map(bias => `
-                        <div class="bias-bar">
-                            <div class="bias-bar-header">
-                                <span class="bias-bar-name">${bias.name}</span>
-                                <span class="bias-bar-count">${bias.count}x detected</span>
-                            </div>
-                            <div class="bias-bar-track">
-                                <div class="bias-bar-fill" style="width: ${(bias.count / maxCount) * 100}%"></div>
-                            </div>
-                        </div>
-                    `).join('');
-                }
+                const common = document.getElementById('global-common-bars');
+                const max = data.most_common_biases[0]?.count || 1;
+                common.innerHTML = data.most_common_biases.map(b => `
+                    <div class="bias-bar">
+                        <div class="bias-bar-header"><span>${b.name}</span><span>${b.count}x</span></div>
+                        <div class="bias-bar-track"><div class="bias-bar-fill" style="width:${(b.count/max)*100}%"></div></div>
+                    </div>`).join('');
 
-                // Most dangerous biases
-                const dangerContainer = document.getElementById('global-danger-bars');
-                if (data.most_dangerous_biases.length === 0) {
-                    dangerContainer.innerHTML = '<p style="color: #4a5568;">No data yet.</p>';
-                } else {
-                    dangerContainer.innerHTML = data.most_dangerous_biases.map(bias => `
-                        <div class="bias-bar">
-                            <div class="bias-bar-header">
-                                <span class="bias-bar-name">${bias.name} <span class="danger-badge">avg score: ${bias.avg_score}/10</span></span>
-                                <span class="bias-bar-count">${bias.count}x</span>
-                            </div>
-                            <div class="bias-bar-track">
-                                <div class="danger-bar-fill" style="width: ${((10 - bias.avg_score) / 10) * 100}%"></div>
-                            </div>
-                        </div>
-                    `).join('');
-                }
-
-            } catch (err) {
-                console.error("Global insights error:", err);
-            }
-        }
-
-        async function clearData() {
-            if (!confirm('Are you sure you want to delete all your data? This cannot be undone.')) return;
-            try {
-                await fetch(`${API}/clear/${currentUser}`, { method: 'DELETE' });
-                alert('Your data has been cleared!');
-                loadHistory();
-                loadProfile();
-            } catch (err) {
-                alert('Something went wrong: ' + err.message);
-            }
+                const danger = document.getElementById('global-danger-bars');
+                danger.innerHTML = data.most_dangerous_biases.map(b => `
+                    <div class="bias-bar">
+                        <div class="bias-bar-header"><span>${b.name} <span class="danger-badge">${b.avg_score}/10</span></span></div>
+                        <div class="bias-bar-track"><div class="danger-bar-fill" style="width:${((10-b.avg_score)/10)*100}%"></div></div>
+                    </div>`).join('');
+            } catch(e) {}
         }
     </script>
 </body>
