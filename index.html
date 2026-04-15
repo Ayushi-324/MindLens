@@ -327,7 +327,7 @@
 
     <script>
         // API CONFIG - REPLACE WITH YOUR URL
-        const API = ''; 
+        const API = 'https://mindlens-app.onrender.com';
         let currentUser = null;
 
         window.onload = () => {
@@ -386,17 +386,20 @@
                 }
                 
                 const data = await res.json();
-                
+
                 // Data mapping with safety defaults
                 const biases = data.biases || [];
-                const score = data.score ?? 'N/A';
+                const rawScore = data.score ?? 0; // 'score' ki jagah 'rawScore' kar diya
                 const summary = data.summary || 'Analysis complete, but no summary provided.';
 
-                // UI Update
-                document.getElementById('score-number').innerText = score;
+                // UI Update - Score ko 100 se 10 mein convert karne ke liye:
+                const displayScore = rawScore > 10 ? (rawScore / 10).toFixed(1) : rawScore;
+
+                document.getElementById('score-number').innerText = displayScore;
                 document.getElementById('summary-text').innerText = summary;
                 document.getElementById('score-card').style.display = 'block';
-
+                
+               
                 const container = document.getElementById('biases-container');
                 container.innerHTML = '';
 

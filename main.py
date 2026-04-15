@@ -41,7 +41,6 @@ Base.metadata.create_all(bind=engine)
 
 # --- GEMINI SETUP ---
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-# Using the lite-preview as it was working for you before the 404
 model = genai.GenerativeModel("gemini-3.1-flash-lite-preview")
 
 app = FastAPI()
@@ -52,6 +51,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# --- YE HAI NAYA HOME ROUTE (Add kiya hai) ---
+@app.get("/")
+async def root():
+    return {
+        "status": "online",
+        "message": "MindLens Backend is running successfully!",
+        "endpoints": ["/analyze (POST)", "/history/{username} (GET)"]
+    }
 
 class AnalyzeRequest(BaseModel):
     username: str
@@ -99,7 +107,7 @@ async def analyze(request: AnalyzeRequest):
                 username=request.username,
                 bias_name=b.get('name', 'Unknown'),
                 explanation=b.get('explanation', ''),
-                reframe=b.get('reframe', ''), # 'impact' column removed to match your schema
+                reframe=b.get('reframe', ''), 
                 analysis_id=new_analysis.id
             )
             db.add(new_bias)
@@ -118,14 +126,16 @@ async def analyze(request: AnalyzeRequest):
 @app.get("/history/{username}")
 async def get_history(username: str):
     db = SessionLocal()
-    results = db.query(Analysis).filter(Analysis.username == username).order_by(Analysis.id.desc()).all()
-    history = []
-    for r in results:
-        history.append({
-            "text": r.text,
-            "score": r.score,
-            "summary": r.summary,
-            "biases": [{"name": b.bias_name, "explanation": b.explanation, "reframe": b.reframe} for b in r.biases]
-        })
-    db.close()
-    return history
+    try:
+        results = db.query(Analysis).filter(Analysis.username == username).order_by(Analysis.id.desc()).all()
+        history = []
+        for r in results:
+            history.append({
+                "text": r.text,
+                "score": r.score,
+                "summary": r.summary,
+                "biases": [{"name": b.bias_name, "explanation": b.explanation, "reframe": b.reframe} for b in r.biases]
+            })
+        return history
+    finally:
+        db.close()
