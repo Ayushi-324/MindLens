@@ -52,7 +52,7 @@ with engine.connect() as conn:
 
 # --- GEMINI SETUP ---
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-model = genai.GenerativeModel("gemini-1.5-flash-8b")
+model = genai.GenerativeModel("gemini-2.5-flash")
 
 app = FastAPI()
 
