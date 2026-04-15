@@ -3,6 +3,7 @@ import json
 import re
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse # Import for HTML
 from pydantic import BaseModel
 import google.generativeai as genai
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, create_engine
@@ -52,19 +53,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- YE HAI NAYA HOME ROUTE (Add kiya hai) ---
+# --- 1. YE HAI VO FIX: Jo tumhara interface wapas layega ---
 @app.get("/")
-async def root():
-    return {
-        "status": "online",
-        "message": "MindLens Backend is running successfully!",
-        "endpoints": ["/analyze (POST)", "/history/{username} (GET)"]
-    }
+async def serve_index():
+    return FileResponse('index.html')
 
 class AnalyzeRequest(BaseModel):
     username: str
     text: str
 
+# --- 2. ANALYZE ROUTE ---
 @app.post("/analyze")
 async def analyze(request: AnalyzeRequest):
     db = SessionLocal()
@@ -86,12 +84,10 @@ async def analyze(request: AnalyzeRequest):
         print("Step 2: calling Gemini...")
         response = model.generate_content(prompt)
         
-        # Clean the response text (remove markdown code blocks)
         clean_json = re.sub(r'```json|```', '', response.text).strip()
         data = json.loads(clean_json)
         print("Step 3: Gemini response received and parsed")
 
-        # Save to Database
         new_analysis = Analysis(
             username=request.username,
             text=request.text,
@@ -123,6 +119,7 @@ async def analyze(request: AnalyzeRequest):
     finally:
         db.close()
 
+# --- 3. HISTORY ROUTE ---
 @app.get("/history/{username}")
 async def get_history(username: str):
     db = SessionLocal()
