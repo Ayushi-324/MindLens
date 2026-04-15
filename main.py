@@ -1,11 +1,12 @@
 import os
 import json
 import re
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, create_engine, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
@@ -15,7 +16,12 @@ DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./mindlens.db")
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
-engine = create_engine(DATABASE_URL)
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True,        # ← fixes connection timeout
+    pool_recycle=280,          # ← recycles connections before they die
+    connect_args={"connect_timeout": 10} if "postgresql" in DATABASE_URL else {}
+)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
@@ -41,7 +47,7 @@ class BiasRecord(Base):
 # Create tables if they don't exist
 Base.metadata.create_all(bind=engine)
 
-# Fix missing columns automatically (safe to run every time)
+# Fix missing columns automatically
 with engine.connect() as conn:
     try:
         conn.execute(text("ALTER TABLE bias_records ADD COLUMN reframe TEXT"))
@@ -50,9 +56,8 @@ with engine.connect() as conn:
     except:
         print("✅ 'reframe' column already exists, skipping")
 
-# --- GEMINI SETUP ---
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-model = genai.GenerativeModel("gemini-2.5-flash")
+# --- GEMINI SETUP (new package) ---
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 app = FastAPI()
 
@@ -90,7 +95,10 @@ async def analyze(request: AnalyzeRequest):
         """
 
         print("Step 2: calling Gemini...")
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt
+        )
 
         clean_json = re.sub(r'```json|```', '', response.text).strip()
         data = json.loads(clean_json)

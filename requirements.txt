@@ -1,6 +1,6 @@
 fastapi
 uvicorn
-google-generativeai>=0.5.2
+google-genai
 sqlalchemy
 aiofiles
 pydantic
